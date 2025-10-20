@@ -1,0 +1,19 @@
+# <type>: <subject> (50 chars max)
+
+# <body> (Explain WHAT and WHY, not HOW)
+
+# Documentation Updates:
+# - [ ] ADR created/updated: #
+# - [ ] Technical spec updated: Section:
+# - [ ] API docs updated: Endpoint:
+# - [ ] Tests added: Type:
+
+# Decision Checklist:
+# - [ ] Is this implementing a documented decision?
+# - [ ] Will someone ask "why" about this later?
+# - [ ] Are all "magic numbers" explained?
+# - [ ] Are trade-offs documented?
+
+# Related ADRs: #
+
+# Types: feat, fix, docs, style, refactor, test, chore
