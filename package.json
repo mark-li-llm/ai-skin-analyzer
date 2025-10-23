@@ -1,0 +1,21 @@
+{
+  "name": "ai-skin-analyzer",
+  "version": "0.1.0",
+  "description": "AI-powered skin analysis and sunscreen recommendation system",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test:vision": "node experiments/test-openai-vision.js"
+  },
+  "keywords": [
+    "skin-analysis",
+    "openai",
+    "vision-api",
+    "sunscreen"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
+}

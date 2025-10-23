@@ -8,6 +8,9 @@ node_modules/
 /dist
 /build
 
+
+/worktrees
+
 # IDE
 .vscode/
 .idea/
@@ -23,6 +26,9 @@ yarn-error.log*
 # Testing
 coverage/
 .nyc_output
+
+# # Test images (personal photos, do not commit)
+# experiments/test-images/
 
 # Next.js (if used later)
 .next/

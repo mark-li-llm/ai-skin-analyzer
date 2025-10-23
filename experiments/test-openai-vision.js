@@ -142,8 +142,8 @@ async function testVisionAPI(imageUrl) {
             ]
           }
         ],
-        max_tokens: 1000,
-        temperature: 0.3  // Lower temperature for more consistent results
+        max_completion_tokens: 3000  // Increased to allow for reasoning + actual output
+        // Note: gpt-5-nano uses reasoning tokens internally before generating output
       })
     });
 
@@ -155,6 +155,12 @@ async function testVisionAPI(imageUrl) {
     }
 
     console.log('✅ API Response received!\n');
+
+    // Debug: Log full response structure
+    console.log('🔍 Full API Response:');
+    console.log(JSON.stringify(data, null, 2));
+    console.log('\n');
+
     console.log('📝 Raw Response:');
     console.log('-'.repeat(50));
     console.log(data.choices[0].message.content);
