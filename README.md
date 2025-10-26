@@ -64,24 +64,16 @@ npm install
 cp .env.example .env
 # Add your OPENAI_API_KEY
 
-# Check project status
-make status
-
 # Run development server
 npm run dev
 ```
 
-### Key Workflow Commands
+### Key Development Commands
 
 ```bash
-make status          # Check documentation status & TBDs
-make help           # Show all available commands
-make decision       # Create a new ADR
-make commit         # Commit with automatic checks
-make check          # Validate documentation
-npm run dev         # Start development server (once built)
+npm run dev         # Start development server
 npm run build       # Build for production
-npm run test        # Run tests
+npm run lint        # Run ESLint
 ```
 
 ## 📚 Documentation

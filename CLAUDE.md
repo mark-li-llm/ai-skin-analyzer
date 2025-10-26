@@ -11,41 +11,40 @@ Skin analysis MVP using OpenAI Vision API to classify skin types and recommend p
 These are actual production models from OpenAI. Do not question their existence or suggest they are mock/test models.
 
 ## Critical Rules
-1. **NEVER write code without documentation** - Check/update docs first
-2. **ALWAYS run `make status`** before starting work
-3. **READ TODO.md** to understand current priorities
-4. **Create ADRs for ALL technical decisions** using `make decision`
-5. **Reference ADRs in commits** (e.g., "Implements ADR-002")
-6. do not read archive folder unless necessary
+1. **Documentation first** - Check/update docs for architectural decisions
+2. **READ TODO.md** to understand current priorities
+3. **Create ADRs for major architectural decisions** (framework, infrastructure, deployment)
+4. **Reference ADRs in commits** when relevant (e.g., "Implements ADR-002")
+5. Do not read archive folder unless necessary
 
 ## Quick Navigation - What Do You Need?
 
 ### Understanding the Project
 - **Product requirements** → `docs/01-prd.md`
 - **Current tasks** → `TODO.md`
-- **Project structure** → `PROJECT_STRUCTURE.md`
-- **Detailed tech info** → `.claude/README.md`
+- **API contract** → `docs/CONTRACT-001-MVP.md`
+- **Documentation index** → `docs/README.md`
 
 ### Making Technical Decisions
 - **Check existing decisions** → `ls docs/decisions/`
-- **Create new decision** → `make decision`
-- **See pending decisions** → `make status`
-- **Decision workflow** → `workflow/DEVELOPMENT_WORKFLOW.md`
+- **Create new decision** → `cp docs/decisions/template.md docs/decisions/00X-topic.md`
+- **Planning phase workflow** → `workflow/archive/planning-phase/` (archived)
 
 ### Writing Code
-- **Before coding** → Run `make status` to check for TBDs
-- **Workflow commands** → `make help` or see `COMMANDS.md`
-- **Project scaffolding** → Follow setup in `.claude/README.md`
+- **Start dev server** → `npm run dev`
+- **Build** → `npm run build`
+- **Lint** → `npm run lint`
+- **Deploy** → `git push` (Vercel auto-deploys)
 
 ### Committing Changes
-- **Check documentation** → `make check`
-- **Commit with checks** → `make commit`
-- **Git best practices** → See `COMMANDS.md`
+- **Standard commits** → `git add . && git commit -m "feat: description"`
+- **Reference ADRs** → Only for architectural changes
+- **Git best practices** → Conventional commits (feat, fix, docs, refactor)
 
 ### Current State
-- **Phase**: Planning - documentation in progress, no code yet written
-- **Real Work**: Only `docs/` (incomplete) and `workflow/` folders contain actual content
-- **Scaffolding**: All other folders (`src/`, `scripts/`, `data/`, etc.) are empty placeholders
+- **Phase**: Ready for MVP implementation (all planning and technical decisions complete)
+- **Code**: Next.js 14 app in `app/` directory, types in `types/`, experiments in `experiments/`
+- **Documentation**: Complete in `docs/` with API contract (CONTRACT-001-MVP.md)
 - **Tech Stack**: Next.js 14 + TypeScript (API Routes for backend)
 - **Styling**: Tailwind CSS
 - **Hosting**: Vercel
@@ -54,13 +53,13 @@ These are actual production models from OpenAI. Do not question their existence 
 
 ## Quick Start
 ```bash
-make status    # Check what needs attention
-make help      # See all workflow commands
+npm run dev    # Start development server
 cat TODO.md    # See current tasks
+cat docs/CONTRACT-001-MVP.md    # API contract for parallel development
 ```
 
 ## Priority Actions
 see todo.md
 
 ## Remember
-Documentation first, code second. When in doubt, run `make status`.
+We're in implementation phase. ADRs complete (004, 005, 006). Focus on shipping MVP. Document major architectural decisions only.
