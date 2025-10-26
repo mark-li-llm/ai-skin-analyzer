@@ -1,5 +1,14 @@
 # Database Schema
 
+> **⚠️ NOT APPLICABLE FOR MVP**
+>
+> The MVP is **stateless** and does not use a database (per PRD and technical spec).
+>
+> This document is reserved for future iterations if persistence is needed.
+> See [02-technical-spec.md](./02-technical-spec.md) for the MVP architecture.
+
+---
+
 **Version**: 0.1
 **Last Updated**: 2025-10-19
 **Status**: NOT NEEDED FOR MVP

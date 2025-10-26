@@ -4,10 +4,17 @@
 AI-powered skin analysis app that provides personalized product recommendations based on uploaded photos.
 
 ## 📖 For AI Assistants / Claude Code
-**See [CLAUDE.md](CLAUDE.md) for AI-specific instructions.**
-**See [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for project organization.**
 
-> **Note**: Currently in documentation phase. Only `docs/` and `workflow/` contain actual content. Other folders are empty scaffolding.
+**🚀 Ready to implement MVP? Start here:**
+
+1. **Read the API contract**: [docs/CONTRACT-001-MVP.md](docs/CONTRACT-001-MVP.md) ⭐⭐⭐
+2. **Check your tasks**: [docs/SPRINT-001-MVP.md](docs/SPRINT-001-MVP.md) ⭐⭐
+3. **Use shared types**: [types/analysis.ts](types/analysis.ts) ⭐⭐⭐
+4. **Frontend mock data**: [public/mocks/](public/mocks/) (for parallel dev)
+
+**Full navigation**: [docs/README.md](docs/README.md) | **AI instructions**: [CLAUDE.md](CLAUDE.md)
+
+> **Note**: CONTRACT-001-MVP.md is the authoritative source for implementation. All other docs are context/reference.
 
 
 ## 🏗️ Tech Stack
@@ -23,14 +30,21 @@ AI-powered skin analysis app that provides personalized product recommendations 
 
 ## 🔄 Current Status
 
-- [x] Phase 0: Repository Setup & Planning
+- [x] Phase 0: Repository Setup & Planning (Complete)
 - [x] Phase 1: Documentation & Design (Complete)
-- [ ] Phase 2: OpenAI Integration Testing (Current)
-- [ ] Phase 3: MVP Development
-- [ ] Phase 4: Testing & Iteration
-- [ ] Phase 5: Beta Launch
+- [x] Phase 2: OpenAI Integration Testing (Complete ✅)
+- [x] Phase 3: Technical Decisions & Verification (Complete ✅)
+- [ ] Phase 4: MVP Implementation (Ready to Start 🚀)
+- [ ] Phase 5: Testing & Iteration
+- [ ] Phase 6: Beta Launch
 
-**Latest**: All documentation complete (`docs/` folder). Ready to test OpenAI Vision API integration with gpt-5-nano model.
+**Latest**:
+- ✅ OpenAI Vision API validated (gpt-5-nano working perfectly)
+- ✅ ADR-004 (Model Selection) & ADR-006 (File Upload) completed
+- ✅ ADR-005 (Image Processing with sharp) verified on Vercel
+- ✅ API contract finalized ([CONTRACT-001-MVP.md](docs/CONTRACT-001-MVP.md))
+- ✅ Mock data created for frontend development
+- 🚀 **Ready for parallel frontend/backend development**
 
 
 ## 🚀 Quick Start
@@ -72,22 +86,34 @@ npm run test        # Run tests
 
 ## 📚 Documentation
 
+**Start here**: [docs/README.md](docs/README.md) - Complete documentation index
+
+**For Implementation** (Read First):
+- [API Contract](docs/CONTRACT-001-MVP.md) ⭐⭐⭐ - Single source of truth
+- [Sprint Plan](docs/SPRINT-001-MVP.md) ⭐⭐ - MVP task checklist
+- [Type Definitions](types/analysis.ts) ⭐⭐⭐ - Shared TypeScript types
+- [Mock Data](public/mocks/) ⭐⭐ - Frontend parallel dev
+
+**Planning Documents**:
 - [Product Requirements](docs/01-prd.md) - What we're building and why
-- [Technical Spec](docs/02-technical-spec.md) - Architecture & API design
-- [Database Schema](docs/03-database-schema.md) - Data models
-- [API Documentation](docs/04-api-documentation.md) - Endpoint reference
-- [Prompt Engineering](docs/05-prompt-engineering.md) - OpenAI prompt iterations
-- [Deployment Guide](docs/06-deployment.md) - How to deploy
+- [Technical Spec](docs/02-technical-spec.md) - Architecture & tech stack
+- [Prompt Engineering](docs/05-prompt-engineering.md) - OpenAI prompt definition
+- [Deployment Guide](docs/06-deployment.md) - Vercel deployment
 - [Testing Strategy](docs/07-testing-strategy.md) - Test approach
+
+**Technical Decisions** ([decisions/](docs/decisions/)):
+- ADR-004: OpenAI Model Selection (gpt-5-nano)
+- ADR-005: Image Processing Library (sharp, verified ✅)
+- ADR-006: File Upload Handling (Next.js native FormData)
 
 
 
 ## 📋 Quick Links
 
-- [Current Sprint](TODO.md) - What I'm working on now
-- [Ideas & Notes](NOTES.md) - Random thoughts and experiments
-- [Changelog](CHANGELOG.md) - What's been done
-- [Roadmap](planning/roadmap.md) - Where we're headed
+- [Documentation Index](docs/README.md) - Complete navigation
+- [SPRINT-001 MVP Plan](docs/SPRINT-001-MVP.md) - Parallel dev scope and tasks
+- [Current Work](TODO.md) - Work tracking
+- [Mock Data](public/mocks/) - Frontend development
 
 
 

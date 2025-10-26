@@ -1,5 +1,17 @@
 # API Documentation
 
+> **⚠️ DEPRECATED (2025-10-24)**
+>
+> This document has been superseded by **CONTRACT-001-MVP.md**.
+>
+> For the latest API specification and implementation contract, please refer to:
+> - [CONTRACT-001-MVP.md](./CONTRACT-001-MVP.md) - Authoritative API contract
+> - [types/analysis.ts](../types/analysis.ts) - TypeScript definitions
+>
+> This file is kept for historical reference only.
+
+---
+
 **Version**: 0.1
 **Last Updated**: 2025-10-19
 **Base URL**: `/api`
