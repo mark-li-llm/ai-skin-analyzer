@@ -1,0 +1,24 @@
+{
+  "skinType": "combination",
+  "confidence": 0.78,
+  "analysis": {
+    "observedCharacteristics": [
+      "Noticeable T-zone shine",
+      "Cheeks appear more balanced"
+    ],
+    "skinTypeExplanation": "Oil production is more visible in the T-zone while cheeks look balanced, suggesting combination skin."
+  },
+  "productRecommendation": {
+    "formulationType": "Oil-free gel, mattifying finish",
+    "formulationReasoning": "Controls T-zone shine without overburdening drier areas.",
+    "specificProducts": [
+      {
+        "brandName": "Neutrogena",
+        "productName": "Ultra Sheer Dry-Touch",
+        "spf": "55",
+        "keyBenefit": "Lightweight, non-greasy, good for shine control"
+      }
+    ]
+  },
+  "additionalNotes": "Consider applying 15 minutes before sun exposure."
+}
