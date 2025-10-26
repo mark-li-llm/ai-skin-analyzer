@@ -1,6 +1,6 @@
 # TODO
 
-**Last Updated**: 2025-10-25
+**Last Updated**: 2025-10-26
 **Project Status**: Ready for MVP implementation. All technical decisions completed and verified.
 
 **Sprint plan**: [docs/SPRINT-001-MVP.md](docs/SPRINT-001-MVP.md)
@@ -30,30 +30,33 @@
 
 ## ⏭️ Next
 
-### Immediate Tasks (This Week)
+### Active Sprint: SPRINT-001 (MVP Implementation)
+📋 **Full task breakdown & acceptance criteria**: [docs/SPRINT-001-MVP.md](docs/SPRINT-001-MVP.md)
 
-**Documentation Updates**:
-- [ ] Update ADR-005 status from "Proposed" to "Accepted"
-- [ ] Supplement mock data (add more skin type variants)
+### This Week's Priority
+1. **Backend API Route** (Day 1-2)
+   - [ ] Implement `/api/analyze-skin` with file validation
+   - [ ] Integrate sharp preprocessing & OpenAI Vision API
+   - Dependencies: `.env.local` with OPENAI_API_KEY
+
+2. **Frontend Upload Flow** (Day 1-2, parallel)
+   - [ ] Build upload component with drag/drop & validations
+   - [ ] Create results display using mock data
+   - Dependencies: None (use public/mocks/)
+
+3. **Integration & Testing** (Day 3)
+   - [ ] Connect frontend to real API
+   - [ ] End-to-end testing of complete flow
+   - [ ] Deploy to Vercel
+
+### Quick Wins (Can do anytime)
 - [ ] Create DEV_SETUP.md for onboarding
 
-**Frontend Tasks** (see [SPRINT-001](docs/SPRINT-001-MVP.md)):
-- [ ] Create landing page with image upload component
-- [ ] Build upload component (drag/drop, validation, disclaimers)
-- [ ] Create results display component (3-part layout)
-- [ ] Implement error handling UI
-
-**Backend Tasks** (see [SPRINT-001](docs/SPRINT-001-MVP.md)):
-- [ ] Build `/api/analyze-skin` API route
-- [ ] Implement file upload handling (FormData)
-- [ ] Add image preprocessing (sharp: resize, format, base64)
-- [ ] Integrate OpenAI Vision API call
-- [ ] Add error handling and validation
-
-**Integration**:
-- [ ] Connect frontend to real API
-- [ ] End-to-end testing
-- [ ] Vercel deployment
+### Dependencies & Notes
+- ✅ Frontend and Backend can work in parallel
+- ✅ Mock data available in `public/mocks/`
+- ✅ Contract frozen in `docs/CONTRACT-001-MVP.md`
+- ⚠️ Backend needs OPENAI_API_KEY in .env.local
 
 ---
 
