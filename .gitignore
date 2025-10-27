@@ -44,3 +44,4 @@ venv/
 ENV/
 .pytest_cache/
 .vercel
+tsconfig.tsbuildinfo
