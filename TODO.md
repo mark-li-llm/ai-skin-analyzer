@@ -1,6 +1,6 @@
 # TODO
 
-**Last Updated**: 2025-10-26
+**Last Updated**: 2025-10-27
 **Project Status**: Ready for MVP implementation. All technical decisions completed and verified.
 
 **Sprint plan**: [docs/SPRINT-001-MVP.md](docs/SPRINT-001-MVP.md)
@@ -56,7 +56,9 @@
 - ✅ Frontend and Backend can work in parallel
 - ✅ Mock data available in `public/mocks/`
 - ✅ Contract frozen in `docs/CONTRACT-001-MVP.md`
+- ✅ Password protection implemented (middleware + login page)
 - ⚠️ Backend needs OPENAI_API_KEY in .env.local
+- ⚠️ Deployment needs AUTH_PASSWORD in Vercel environment variables
 
 ---
 
@@ -75,6 +77,13 @@
 ---
 
 ## ✅ Done
+
+**2025-10-27**
+- [x] **Product Access Protection**: Implemented middleware-based password protection (middleware.ts, app/login, app/api/login)
+- [x] **Login Page**: Created minimal login UI with Tailwind CSS
+- [x] **Authentication API**: Password verification with secure httpOnly cookies
+- [x] **Environment Configuration**: Added AUTH_PASSWORD to .env.local
+- [x] **Documentation Updates**: Updated docs/06-deployment.md and TODO.md with security configuration
 
 **2025-10-25**
 - [x] **Documentation Architecture Refactor**: Deprecated 03/04, created docs/README.md for navigation
@@ -118,6 +127,7 @@
 | OpenAI Integration | ✅ Complete | 2025-10-23 |
 | Technical Decisions | ✅ Complete | 2025-10-25 |
 | Sharp Verification | ✅ Complete | 2025-10-25 |
+| Product Access Protection | ✅ Complete | 2025-10-27 |
 | MVP Implementation | 🚧 Ready to Start | - |
 | Testing & Deployment | ⏳ Pending | - |
 

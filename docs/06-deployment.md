@@ -1,7 +1,7 @@
 # Deployment Guide
 
-**Version**: 0.1
-**Last Updated**: 2025-10-19
+**Version**: 0.2
+**Last Updated**: 2025-10-27
 
 ## Overview
 
@@ -50,3 +50,36 @@ No staging environment defined for MVP.
 - Custom domain name
 - Monitoring/error tracking tools
 - Rate limiting implementation approach
+
+## Security & Access Control
+
+**Added**: October 2025 (Product protection against unauthorized access)
+
+### Purpose
+Protect the MVP from unauthorized access and potential abuse during early deployment phase.
+
+### Implementation Details
+- **Technology**: Next.js Middleware (native solution)
+- **Auth Method**: Single shared password
+- **Session**: Secure httpOnly cookie
+- **Protected Routes**: All routes except /login
+
+### Environment Configuration
+```bash
+# Required in production (.env.local or Vercel Environment Variables)
+AUTH_PASSWORD=secure_password_here  # Strong password required (16+ characters recommended)
+```
+
+### Security Notes
+- Password must be strong (recommend 16+ characters)
+- Can support multiple passwords if needed
+- Easy to remove after public launch
+- No impact on application performance
+- Middleware runs at Edge Runtime for minimal latency
+
+### Removal Plan
+Once the product is ready for public launch, simply:
+1. Delete the middleware file
+2. Remove AUTH_PASSWORD from environment variables
+3. Delete the /login route
+4. Redeploy to Vercel
