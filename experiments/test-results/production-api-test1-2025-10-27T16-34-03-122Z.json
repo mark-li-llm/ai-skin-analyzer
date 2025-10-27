@@ -1,0 +1,33 @@
+{
+  "skinType": "normal",
+  "confidence": 0.65,
+  "analysis": {
+    "observedCharacteristics": [
+      "Even skin tone with smooth texture",
+      "Mild shine on the T-zone (forehead, nose) but cheeks remain relatively matte",
+      "Pores not visibly enlarged; no flakiness or dehydration signs",
+      "No redness or irritation; a small blemish present on the cheek",
+      "Overall balanced hydration with no tight or dry areas"
+    ],
+    "skinTypeExplanation": "The skin shows balanced hydration with only subtle central-area shine and no dryness or excessive oil, consistent with a normal skin type."
+  },
+  "productRecommendation": {
+    "formulationType": "Oil-free, lightweight fluid/gel-based sunscreen with a matte finish",
+    "formulationReasoning": "Normal skin tends to perform well with a lightweight, non-greasy sunscreen that provides protection without clogging pores or leaving a heavy residue, preserving a natural look.",
+    "specificProducts": [
+      {
+        "brandName": "Neutrogena",
+        "productName": "Ultra Sheer Dry-Touch Sunscreen SPF 55",
+        "spf": "55",
+        "keyBenefit": "Oil-free, non-greasy texture with a matte finish suitable for normal/combination skin"
+      },
+      {
+        "brandName": "La Roche-Posay",
+        "productName": "Anthelios Ultra-Light Fluid Facial Sunscreen SPF 50+",
+        "spf": "50+",
+        "keyBenefit": "Very lightweight, breathable protection with a barely-there feel"
+      }
+    ]
+  },
+  "additionalNotes": "If sensitivity or irritation is a concern, consider fragrance-free or mineral-based options and patch-test any new product before full use."
+}
