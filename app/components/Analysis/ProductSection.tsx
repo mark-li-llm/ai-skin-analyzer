@@ -68,7 +68,7 @@ export function ProductSection({ recommendation }: ProductSectionProps) {
           </li>
           <li className="flex items-start gap-2">
             <span className="mt-1">•</span>
-            <span>Don't forget often-missed areas: ears, lips, and around eyes</span>
+            <span>Don&apos;t forget often-missed areas: ears, lips, and around eyes</span>
           </li>
         </ul>
       </div>
