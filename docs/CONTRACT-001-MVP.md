@@ -6,7 +6,7 @@
 >
 > Related:
 > - [types/analysis.ts](../types/analysis.ts) - TypeScript type definitions
-> - [SPRINT-001-MVP.md](./SPRINT-001-MVP.md) - Sprint task checklist
+> - [SPRINT-001-MVP.md](./completed/SPRINT-001-MVP.md) - Sprint task checklist (completed)
 
 ---
 

@@ -4,20 +4,25 @@ Welcome to the AI Skin Analyzer documentation. This index helps you find the rig
 
 ---
 
-## 🚀 For Implementation (Read These First)
+## ✅ MVP Status: **COMPLETED & DEPLOYED** 🎉
 
-**If you're implementing the MVP, start here:**
+**Production URL**: https://ai-skin-analyzer.vercel.app
+**Completion Date**: 2025-10-27
+**Status**: Live in production, fully functional
+
+📖 **Implementation Summary**: [completed/README.md](./completed/README.md)
+
+---
+
+## 🎯 Current Phase: Post-MVP Monitoring
+
+**For new contributors or code review:**
 
 | Document | Purpose | Priority |
 |----------|---------|----------|
-| [**CONTRACT-001-MVP.md**](./CONTRACT-001-MVP.md) | API contract (single source of truth) | ⭐⭐⭐ |
-| [**SPRINT-001-MVP.md**](./SPRINT-001-MVP.md) | Sprint tasks and checklist | ⭐⭐ |
+| [**completed/README.md**](./completed/README.md) | MVP completion summary & implementation overview | ⭐⭐⭐ |
+| [**CONTRACT-001-MVP.md**](./CONTRACT-001-MVP.md) | API contract (reference) | ⭐⭐ |
 | [**types/analysis.ts**](../types/analysis.ts) | TypeScript type definitions | ⭐⭐⭐ |
-
-**Quick Start**:
-1. Read CONTRACT-001-MVP.md to understand the API specification
-2. Import types from `types/analysis.ts` in your code
-3. Follow SPRINT-001-MVP.md checklist for parallel development
 
 ---
 
@@ -41,10 +46,26 @@ Welcome to the AI Skin Analyzer documentation. This index helps you find the rig
 
 Located in [decisions/](./decisions/):
 - [004-openai-model-selection.md](./decisions/004-openai-model-selection.md) - Why we chose gpt-5-nano
+- [005-image-processing-library.md](./decisions/005-image-processing-library.md) - Why we chose Sharp
 - [006-file-upload-handling.md](./decisions/006-file-upload-handling.md) - File upload strategy
 
 **Related Research**:
 - [research/adr006-file-upload-comparison.md](../research/adr006-file-upload-comparison.md)
+
+---
+
+## 📦 Completed Implementation
+
+**MVP implementation documents (archived for reference):**
+
+Located in [completed/](./completed/):
+- [**README.md**](./completed/README.md) - MVP completion summary ⭐
+- [IMPLEMENTATION-BACKEND-001.md](./completed/IMPLEMENTATION-BACKEND-001.md) - Backend implementation
+- [IMPLEMENTATION-FRONTEND-001.md](./completed/IMPLEMENTATION-FRONTEND-001.md) - Frontend implementation
+- [REVIEW-IMPLEMENTATION-FRONTEND-001.md](./completed/REVIEW-IMPLEMENTATION-FRONTEND-001.md) - Frontend code review
+- [SPRINT-001-MVP.md](./completed/SPRINT-001-MVP.md) - Sprint plan & checklist
+- [METADATA-STRIPPING-VERIFICATION.md](./completed/METADATA-STRIPPING-VERIFICATION.md) - Security validation
+- [testing/](./completed/testing/) - Testing results and reports
 
 ---
 
@@ -81,22 +102,22 @@ These files are kept for historical reference and future planning only.
 
 ## 🔄 How to Use This Documentation
 
-### For Frontend Developers
-1. Read [CONTRACT-001-MVP.md](./CONTRACT-001-MVP.md) sections 1, 4, 5, 7
-2. Import types from `types/analysis.ts`
-3. Use mock data (to be created in `public/mocks/`)
-4. Follow frontend checklist in [SPRINT-001-MVP.md](./SPRINT-001-MVP.md)
+### For New Contributors / Code Review
+1. Read [completed/README.md](./completed/README.md) for MVP overview
+2. Review [completed/IMPLEMENTATION-BACKEND-001.md](./completed/IMPLEMENTATION-BACKEND-001.md) and [completed/IMPLEMENTATION-FRONTEND-001.md](./completed/IMPLEMENTATION-FRONTEND-001.md)
+3. Check [CONTRACT-001-MVP.md](./CONTRACT-001-MVP.md) for API specification
+4. Import types from `types/analysis.ts`
 
-### For Backend Developers
-1. Read [CONTRACT-001-MVP.md](./CONTRACT-001-MVP.md) sections 1-6
-2. Import types from `types/analysis.ts`
-3. Reference [05-prompt-engineering.md](./05-prompt-engineering.md) for OpenAI prompt
-4. Follow backend checklist in [SPRINT-001-MVP.md](./SPRINT-001-MVP.md)
+### For Feature Development
+1. Read [01-prd.md](./01-prd.md) and [02-technical-spec.md](./02-technical-spec.md) for context
+2. Check existing ADRs in [decisions/](./decisions/) for technical constraints
+3. Create new ADR if making significant architectural changes
+4. Follow the template in [decisions/template.md](./decisions/template.md)
 
-### For Decision Making
-1. Check existing ADRs in [decisions/](./decisions/)
-2. If making a new technical decision, create a new ADR
-3. Follow the template in [decisions/template.md](./decisions/template.md)
+### For Understanding Past Decisions
+1. Check ADRs in [decisions/](./decisions/) for "why" behind technical choices
+2. Review [completed/](./completed/) for implementation details
+3. See [completed/testing/](./completed/testing/) for test coverage
 
 ---
 
@@ -104,33 +125,34 @@ These files are kept for historical reference and future planning only.
 
 ```
 ┌─────────────────────────────────────────────────┐
-│  MUST READ for Implementation                   │
-│  • CONTRACT-001-MVP.md                          │
+│  MUST READ (MVP Complete - Code Review)        │
+│  • completed/README.md                          │
 │  • types/analysis.ts                            │
-│  • SPRINT-001-MVP.md                            │
+│  • CONTRACT-001-MVP.md (reference)              │
 └─────────────────────────────────────────────────┘
            │
            ▼
 ┌─────────────────────────────────────────────────┐
-│  SHOULD READ for Context                        │
+│  SHOULD READ (Implementation Details)           │
+│  • completed/IMPLEMENTATION-BACKEND-001.md      │
+│  • completed/IMPLEMENTATION-FRONTEND-001.md     │
+│  • completed/testing/*                          │
+└─────────────────────────────────────────────────┘
+           │
+           ▼
+┌─────────────────────────────────────────────────┐
+│  CAN READ (Context & Strategy)                  │
 │  • 01-prd.md                                    │
 │  • 02-technical-spec.md                         │
 │  • 05-prompt-engineering.md                     │
+│  • decisions/*.md (ADRs)                        │
 └─────────────────────────────────────────────────┘
            │
            ▼
 ┌─────────────────────────────────────────────────┐
-│  CAN READ for Reference                         │
-│  • 06-deployment.md                             │
-│  • 07-testing-strategy.md                       │
-│  • decisions/*.md                               │
-└─────────────────────────────────────────────────┘
-           │
-           ▼
-┌─────────────────────────────────────────────────┐
-│  IGNORE for MVP                                 │
-│  • 03-database-schema.md                        │
-│  • 04-api-documentation.md                      │
+│  ARCHIVED (Not Applicable)                      │
+│  • archive/03-database-schema.md                │
+│  • archive/04-api-documentation.md              │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -145,4 +167,5 @@ These files are kept for historical reference and future planning only.
 
 ---
 
-**Last Updated**: 2025-10-24
+**Last Updated**: 2025-10-27
+**Status**: MVP Complete & Deployed to Production

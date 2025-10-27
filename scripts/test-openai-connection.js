@@ -1,36 +1,36 @@
 #!/usr/bin/env node
 /**
- * 快速诊断 OpenAI API 连接
+ * Quick diagnostic for OpenAI API connection
  */
 
 require('dotenv').config({ path: '.env.local' });
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-console.log('🔍 诊断 OpenAI API 连接...\n');
+console.log('🔍 Diagnosing OpenAI API connection...\n');
 
-// 检查 API Key
+// Check API Key
 if (!OPENAI_API_KEY) {
-  console.log('❌ 错误: OPENAI_API_KEY 未配置');
-  console.log('   请在 .env.local 中设置 OPENAI_API_KEY');
+  console.log('❌ Error: OPENAI_API_KEY not configured');
+  console.log('   Please set OPENAI_API_KEY in .env.local');
   process.exit(1);
 }
 
-console.log('✅ API Key 已配置');
-console.log(`   Key 前缀: ${OPENAI_API_KEY.substring(0, 10)}...`);
+console.log('✅ API Key configured');
+console.log(`   Key prefix: ${OPENAI_API_KEY.substring(0, 10)}...`);
 console.log('');
 
-// 测试 API 连接
-console.log('⏳ 测试 API 连接...\n');
+// Test API connection
+console.log('⏳ Testing API connection...\n');
 
 const testModels = [
-  'gpt-5-nano',    // 用户配置的模型
-  'gpt-4o',        // 实际的 GPT-4 Omni 模型
-  'gpt-4o-mini',   // 实际的 GPT-4 Omni Mini 模型
+  'gpt-5-nano',    // User-configured model
+  'gpt-4o',        // Actual GPT-4 Omni model
+  'gpt-4o-mini',   // Actual GPT-4 Omni Mini model
 ];
 
 async function testModel(modelName) {
-  console.log(`📡 测试模型: ${modelName}`);
+  console.log(`📡 Testing model: ${modelName}`);
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -53,19 +53,19 @@ async function testModel(modelName) {
 
     if (response.ok) {
       const data = await response.json();
-      console.log(`   ✅ ${modelName} 工作正常！`);
-      console.log(`   响应: ${data.choices[0].message.content}\n`);
+      console.log(`   ✅ ${modelName} working properly!`);
+      console.log(`   Response: ${data.choices[0].message.content}\n`);
       return true;
     } else {
       const error = await response.json();
-      console.log(`   ❌ ${modelName} 失败`);
-      console.log(`   状态码: ${response.status}`);
-      console.log(`   错误: ${error.error?.message || JSON.stringify(error)}\n`);
+      console.log(`   ❌ ${modelName} failed`);
+      console.log(`   Status code: ${response.status}`);
+      console.log(`   Error: ${error.error?.message || JSON.stringify(error)}\n`);
       return false;
     }
   } catch (error) {
-    console.log(`   ❌ ${modelName} 连接失败`);
-    console.log(`   错误: ${error.message}\n`);
+    console.log(`   ❌ ${modelName} connection failed`);
+    console.log(`   Error: ${error.message}\n`);
     return false;
   }
 }
@@ -74,18 +74,18 @@ async function runDiagnostics() {
   for (const model of testModels) {
     const success = await testModel(model);
     if (success) {
-      console.log('✅ 找到可用的模型！');
-      console.log(`   建议在 route.ts 中使用: ${model}\n`);
+      console.log('✅ Found available model!');
+      console.log(`   Suggested for use in route.ts: ${model}\n`);
       break;
     }
   }
 
   console.log('====================================');
-  console.log('💡 提示:');
-  console.log('   如果所有模型都失败，请检查:');
-  console.log('   1. API Key 是否有效');
-  console.log('   2. API Key 是否有余额');
-  console.log('   3. 网络连接是否正常');
+  console.log('💡 Tips:');
+  console.log('   If all models fail, please check:');
+  console.log('   1. API Key validity');
+  console.log('   2. API Key has available credits');
+  console.log('   3. Network connection is working');
   console.log('====================================');
 }
 

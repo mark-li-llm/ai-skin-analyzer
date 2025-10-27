@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * 测试 OpenAI Vision API
+ * Test OpenAI Vision API
  */
 
 require('dotenv').config({ path: '.env.local' });
@@ -9,15 +9,15 @@ const path = require('path');
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-console.log('🔍 测试 OpenAI Vision API...\n');
+console.log('🔍 Testing OpenAI Vision API...\n');
 
 async function testVisionAPI(modelName) {
-  console.log(`📡 测试模型: ${modelName}`);
+  console.log(`📡 Testing model: ${modelName}`);
 
-  // 读取测试图片
+  // Read test image
   const imagePath = path.join(__dirname, '../experiments/test-images/test1.jpg');
   if (!fs.existsSync(imagePath)) {
-    console.log('❌ 找不到测试图片');
+    console.log('❌ Test image not found');
     return;
   }
 
@@ -58,21 +58,21 @@ async function testVisionAPI(modelName) {
 
     if (response.ok) {
       const data = await response.json();
-      console.log(`   ✅ ${modelName} Vision API 工作正常！`);
-      console.log(`   响应: ${data.choices[0].message.content}`);
+      console.log(`   ✅ ${modelName} Vision API working properly!`);
+      console.log(`   Response: ${data.choices[0].message.content}`);
       console.log('');
       return true;
     } else {
       const error = await response.json();
-      console.log(`   ❌ ${modelName} Vision API 失败`);
-      console.log(`   状态码: ${response.status}`);
-      console.log(`   错误: ${JSON.stringify(error, null, 2)}`);
+      console.log(`   ❌ ${modelName} Vision API failed`);
+      console.log(`   Status code: ${response.status}`);
+      console.log(`   Error: ${JSON.stringify(error, null, 2)}`);
       console.log('');
       return false;
     }
   } catch (error) {
-    console.log(`   ❌ ${modelName} 连接失败`);
-    console.log(`   错误: ${error.message}`);
+    console.log(`   ❌ ${modelName} connection failed`);
+    console.log(`   Error: ${error.message}`);
     console.log('');
     return false;
   }
@@ -84,7 +84,7 @@ async function main() {
   for (const model of models) {
     const success = await testVisionAPI(model);
     if (success && model === 'gpt-5-nano') {
-      console.log('✅ gpt-5-nano 可以使用！');
+      console.log('✅ gpt-5-nano is available!');
       break;
     }
   }
