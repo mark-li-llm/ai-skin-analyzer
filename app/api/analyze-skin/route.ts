@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
-import type { SkinAnalysisResult, ApiError } from '@/types/analysis';
+import type { SkinAnalysisResult, ApiError } from '../../../types/analysis';
 
 // Environment
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -335,7 +335,7 @@ function handleError(error: any): NextResponse<ApiError> {
 /**
  * Main POST handler for /api/analyze-skin
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     // Check API key first
     if (!OPENAI_API_KEY) {
