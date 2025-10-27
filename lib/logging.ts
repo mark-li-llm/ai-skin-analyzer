@@ -160,7 +160,8 @@ export async function getUserStats(): Promise<UserStats[]> {
 export async function hasImageBeenAnalyzed(imageHash: string): Promise<boolean> {
   try {
     const client = getRedisClient();
-    return await client.sismember('images:analyzed', imageHash);
+    const result = await client.sismember('images:analyzed', imageHash);
+    return result === 1;
   } catch (error) {
     console.error('Failed to check image hash:', error);
     return false;
