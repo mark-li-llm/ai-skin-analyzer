@@ -5,7 +5,10 @@ import { getJWTSecret } from '@/lib/jwt';
 export async function POST(request: Request) {
   const { password } = await request.json();
 
-  if (password === process.env.AUTH_PASSWORD) {
+  // Remove all whitespace characters (spaces, newlines, tabs, etc.)
+  const cleanPassword = password.replace(/\s+/g, '');
+
+  if (cleanPassword === process.env.AUTH_PASSWORD) {
     // Generate signed JWT token
     const secret = getJWTSecret();
     const token = await new SignJWT({ authenticated: true })
