@@ -45,3 +45,10 @@ ENV/
 .pytest_cache/
 .vercel
 tsconfig.tsbuildinfo
+
+
+# LOCAL FOLDERS
+
+.claude/
+thoughts/
+workflow/

@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { jwtVerify } from 'jose';
+import { getJWTSecret } from '@/lib/jwt';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Public paths that don't require authentication
@@ -14,15 +16,32 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check for authentication cookie
+  // Get authentication token
   const authToken = request.cookies.get('auth-token');
 
-  if (authToken?.value === 'authenticated') {
-    return NextResponse.next();
+  // No token - redirect to login
+  if (!authToken?.value) {
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // Redirect to login if not authenticated
-  return NextResponse.redirect(new URL('/login', request.url));
+  // Verify JWT token
+  try {
+    const secret = getJWTSecret();
+    const { payload } = await jwtVerify(authToken.value, secret);
+
+    // Check payload contains expected data
+    if (payload.authenticated === true) {
+      return NextResponse.next();  // ✅ Valid token - allow access
+    }
+
+    // Invalid payload - redirect to login
+    return NextResponse.redirect(new URL('/login', request.url));
+
+  } catch (error) {
+    // Token verification failed (invalid signature, expired, malformed)
+    console.error('JWT verification failed:', error);
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
 }
 
 export const config = {
