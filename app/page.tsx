@@ -7,7 +7,7 @@ import { AnalysisResults } from '@/app/components/Analysis'
 import { LoadingSpinner, Toast } from '@/app/components/UI'
 import { analyzeSkin, isMockMode } from '@/lib/api/skinAnalysis'
 import { getErrorMessage } from '@/lib/utils'
-import { useLocalStorageBoolean } from '@/lib/hooks'
+import { useLocalStorageBoolean, useLocalStorage } from '@/lib/hooks'
 
 export default function Home() {
   // State management
@@ -22,14 +22,45 @@ export default function Home() {
     false
   )
 
+  // User identification with localStorage persistence
+  const [userName, setUserName, isUserNameLoaded] = useLocalStorage<string>(
+    'ai-skin-analyzer-user-name',
+    ''
+  )
+
+  // Store anonymous ID in localStorage for persistence
+  const [anonId, setAnonId, isAnonIdLoaded] = useLocalStorage<string>(
+    'ai-skin-analyzer-anon-id',
+    ''
+  )
+
+  // Generate anonymous ID if needed (only once)
+  const getUserIdentifier = () => {
+    if (userName && userName.trim()) {
+      return userName.trim()
+    }
+
+    // Use existing anonymous ID or generate new one
+    if (anonId) {
+      return anonId
+    }
+
+    // Generate new anonymous ID: anon-XXXXXX (6 random chars)
+    const newAnonId = 'anon-' + Math.random().toString(36).substring(2, 8)
+    setAnonId(newAnonId)
+    return newAnonId
+  }
+
   // Handle file selection and analysis
   const handleFileSelect = async (file: File) => {
     setSelectedFile(file)
     setError(null)
     setIsAnalyzing(true)
 
+    const userId = getUserIdentifier() // Get user ID
+
     try {
-      const result = await analyzeSkin(file)
+      const result = await analyzeSkin(file, userId) // Pass userId
       setResults(result)
     } catch (err) {
       setError(err as ApiError)
@@ -89,6 +120,25 @@ export default function Home() {
                 <li>3. Get instant AI-powered skin analysis</li>
                 <li>4. Receive personalized sunscreen recommendations</li>
               </ol>
+            </div>
+
+            {/* User Identification */}
+            <div className="mb-6">
+              <label htmlFor="userName" className="block text-sm font-medium text-gray-700 mb-2">
+                Your name (optional)
+              </label>
+              <input
+                id="userName"
+                type="text"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                placeholder="Enter your name or leave blank for anonymous"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                disabled={!isUserNameLoaded}
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                This helps track your analysis history
+              </p>
             </div>
 
             {/* Disclaimer */}

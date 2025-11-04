@@ -100,8 +100,8 @@ export async function logAnalysis(log: Omit<AnalysisLog, 'id' | 'timestamp'>): P
       await client.sadd('images:analyzed', log.imageHash);
     }
 
-    // Set expiration for daily logs (keep for 30 days)
-    await client.expire(`logs:${dateKey}`, 30 * 24 * 60 * 60);
+    // Set expiration for daily logs (keep for 365 days / 1 year)
+    await client.expire(`logs:${dateKey}`, 365 * 24 * 60 * 60);
 
   } catch (error) {
     console.error('Failed to log analysis:', error);

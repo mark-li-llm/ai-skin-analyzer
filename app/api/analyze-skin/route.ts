@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import sharp from 'sharp';
 import type { SkinAnalysisResult, ApiError } from '../../../types/analysis';
+import { logAnalysis, generateImageHash } from '@/lib/logging';
 
 // Environment
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -122,10 +123,13 @@ function validateImageMagicNumber(buffer: Buffer): boolean {
 /**
  * Processes image according to contract requirements
  */
-async function processImage(file: File): Promise<string> {
+async function processImage(file: File): Promise<{ processedImage: string; imageHash: string }> {
   // Convert File to Buffer
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
+
+  // Generate hash from original buffer
+  const imageHash = generateImageHash(buffer);
 
   // Validate magic number (file signature)
   if (!validateImageMagicNumber(buffer)) {
@@ -152,8 +156,11 @@ async function processImage(file: File): Promise<string> {
       // Reference: https://sharp.pixelplumbing.com/api-output#withmetadata
       .toBuffer();
 
-    // Convert to base64
-    return processedBuffer.toString('base64');
+    // Return both processed image and hash
+    return {
+      processedImage: processedBuffer.toString('base64'),
+      imageHash: imageHash
+    };
   } catch (error) {
     console.error('Sharp processing error:', error);
     throw new Error('Invalid image format');
@@ -292,12 +299,29 @@ async function analyzeWithOpenAI(imageBase64: string): Promise<SkinAnalysisResul
 /**
  * Error handler with proper status codes and headers
  */
-function handleError(error: any): NextResponse<ApiError> {
+function handleError(
+  error: any,
+  userId: string = 'unknown',
+  startTime: number = Date.now()
+): NextResponse<ApiError> {
   console.error('API Error:', {
     message: error.message,
     name: error.name,
     stack: error.stack,
     timestamp: new Date().toISOString()
+  });
+
+  // Log error to Redis
+  const duration = Date.now() - startTime;
+  logAnalysis({
+    user: userId,
+    action: 'analyze',
+    status: 'error',
+    errorDetails: error.message || String(error),
+    duration: duration
+  }).catch(err => {
+    // Don't let logging errors break error response
+    console.error('Failed to log error:', err);
   });
 
   // Invalid image format (from magic number validation)
@@ -336,6 +360,9 @@ function handleError(error: any): NextResponse<ApiError> {
  * Main POST handler for /api/analyze-skin
  */
 export async function POST(request: NextRequest) {
+  const startTime = Date.now() // Add timing start
+  let userId = 'anonymous' // Default userId for error handling
+
   try {
     // Check API key first
     if (!OPENAI_API_KEY) {
@@ -352,6 +379,7 @@ export async function POST(request: NextRequest) {
     // Step 1: Parse FormData
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
+    userId = formData.get('userId') as string | null || 'anonymous'; // Update userId
 
     // Step 2: Validate file exists
     if (!file) {
@@ -387,10 +415,35 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 3: Process Image
-    const processedImage = await processImage(file);
+    const { processedImage, imageHash } = await processImage(file);
 
     // Step 4: Call OpenAI
     const analysis = await analyzeWithOpenAI(processedImage);
+
+    // Log successful analysis
+    const duration = Date.now() - startTime;
+    await logAnalysis({
+      user: userId,
+      action: 'analyze',
+      status: 'success',
+      imageHash: imageHash,
+      analysisResult: {
+        skinType: analysis.skinType,
+        confidence: analysis.confidence,
+        issues: analysis.analysis.observedCharacteristics,
+        recommendations: analysis.productRecommendation.specificProducts.map(
+          p => `${p.brandName} ${p.productName}`
+        )
+      },
+      duration: duration,
+      userAgent: request.headers.get('user-agent') || undefined,
+      ip: request.headers.get('x-forwarded-for') ||
+          request.headers.get('x-real-ip') ||
+          undefined
+    }).catch(err => {
+      // Don't let logging errors break the response
+      console.error('Failed to log analysis:', err);
+    });
 
     // Step 5: Return Success with Cache-Control header
     return NextResponse.json<SkinAnalysisResult>(analysis, {
@@ -401,6 +454,6 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     // Error handling
-    return handleError(error);
+    return handleError(error, userId, startTime);
   }
 }

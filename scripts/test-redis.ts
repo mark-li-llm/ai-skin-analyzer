@@ -4,6 +4,8 @@
 import dotenv from 'dotenv';
 
 // IMPORTANT: Load environment variables BEFORE importing logging module
+// Try .env.local first, then fall back to .env.development.local
+dotenv.config({ path: '.env.local' });
 dotenv.config({ path: '.env.development.local' });
 
 // Now import logging module (which initializes Redis)

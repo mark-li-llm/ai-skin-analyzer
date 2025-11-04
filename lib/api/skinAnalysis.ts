@@ -6,12 +6,12 @@ const API_TIMEOUT = 60000 // 60 seconds
 /**
  * Analyze skin from uploaded image file
  */
-export async function analyzeSkin(file: File): Promise<SkinAnalysisResult> {
+export async function analyzeSkin(file: File, userId: string): Promise<SkinAnalysisResult> {
   if (USE_MOCKS) {
     return analyzeSkinMock(file)
   }
 
-  return analyzeSkinAPI(file)
+  return analyzeSkinAPI(file, userId)
 }
 
 /**
@@ -80,9 +80,10 @@ async function analyzeSkinMock(file: File): Promise<SkinAnalysisResult> {
 /**
  * Real API implementation
  */
-async function analyzeSkinAPI(file: File): Promise<SkinAnalysisResult> {
+async function analyzeSkinAPI(file: File, userId: string): Promise<SkinAnalysisResult> {
   const formData = new FormData()
   formData.append('file', file)
+  formData.append('userId', userId)
 
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT)
