@@ -4,7 +4,7 @@ import crypto from 'crypto';
 // Lazy initialization of Redis connection
 let redis: Redis | null = null;
 
-function getRedisClient(): Redis {
+export function getRedisClient(): Redis {
   if (redis) return redis;
 
   const redisUrl = process.env.LOGS_REDIS_URL;
@@ -116,7 +116,13 @@ export async function getLogsByDate(date?: string): Promise<AnalysisLog[]> {
   try {
     const client = getRedisClient();
     const logs = await client.lrange(`logs:${dateKey}`, 0, -1);
-    return logs.map(log => JSON.parse(log as string));
+    return logs.map(log => {
+      // Upstash REST API auto-deserializes JSON, check if already parsed
+      if (typeof log === 'string') {
+        return JSON.parse(log);
+      }
+      return log as AnalysisLog;
+    });
   } catch (error) {
     console.error('Failed to fetch logs:', error);
     return [];
@@ -175,8 +181,8 @@ export async function getRecentLogs(limit: number = 50): Promise<AnalysisLog[]> 
     const logs: AnalysisLog[] = [];
     const today = new Date();
 
-    // Check last 7 days
-    for (let i = 0; i < 7; i++) {
+    // Check last 90 days
+    for (let i = 0; i < 90; i++) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
       const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -184,7 +190,9 @@ export async function getRecentLogs(limit: number = 50): Promise<AnalysisLog[]> 
       const dayLogs = await client.lrange(`logs:${dateKey}`, 0, limit - logs.length - 1);
 
       for (const log of dayLogs) {
-        logs.push(JSON.parse(log as string));
+        // Upstash REST API auto-deserializes JSON, check if already parsed
+        const parsedLog = typeof log === 'string' ? JSON.parse(log) : log;
+        logs.push(parsedLog as AnalysisLog);
         if (logs.length >= limit) break;
       }
 
