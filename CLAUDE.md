@@ -20,6 +20,7 @@ These are actual production models from OpenAI. Do not question their existence 
 ## Quick Navigation - What Do You Need?
 
 ### Understanding the Project
+- **🚀 START HERE (5 min)** → `docs/QUICK_START.md` - Architecture + Code Map + Dev Workflow
 - **Product requirements** → `docs/01-prd.md`
 - **Current tasks** → `TODO.md`
 - **API contract** → `docs/CONTRACT-001-MVP.md`
@@ -42,20 +43,21 @@ These are actual production models from OpenAI. Do not question their existence 
 - **Git best practices** → Conventional commits (feat, fix, docs, refactor)
 
 ### Current State
-- **Phase**: Ready for MVP implementation (all planning and technical decisions complete)
+- **Phase**: MVP Complete & Deployed (Production: https://ai-skin-analyzer.vercel.app)
+- **Current Work**: Usage tracking with Upstash Redis (see TODO.md)
 - **Code**: Next.js 14 app in `app/` directory, types in `types/`, experiments in `experiments/`
-- **Documentation**: Complete in `docs/` with API contract (CONTRACT-001-MVP.md)
+- **Documentation**: Complete in `docs/` - **Start with `docs/QUICK_START.md`** for overview
 - **Tech Stack**: Next.js 14 + TypeScript (API Routes for backend)
 - **Styling**: Tailwind CSS
 - **Hosting**: Vercel
-- **Database**: None (stateless MVP per technical spec)
+- **Database**: None (stateless MVP) + Redis for logging
 - **OpenAI Model**: gpt-5-nano (see ADR-004)
 
 ## Quick Start
 ```bash
-npm run dev    # Start development server
-cat TODO.md    # See current tasks
-cat docs/CONTRACT-001-MVP.md    # API contract for parallel development
+cat docs/QUICK_START.md    # 🚀 5-minute project overview (NEW!)
+npm run dev                 # Start development server
+cat TODO.md                 # See current tasks
 ```
 
 ## Priority Actions
