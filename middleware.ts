@@ -9,6 +9,7 @@ export async function middleware(request: NextRequest) {
   // Public paths that don't require authentication
   if (
     pathname === '/login' ||
+    pathname === '/admin' || // Temporarily public for Step 2 (will add password in Step 3)
     pathname.startsWith('/_next') ||
     pathname === '/favicon.ico' ||
     pathname === '/api/login'
