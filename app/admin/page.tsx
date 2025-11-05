@@ -82,7 +82,9 @@ export default async function AdminDashboard() {
                       {stat.totalAnalyses}
                     </td>
                     <td className="border border-gray-300 px-4 py-2 text-sm">
-                      {new Date(stat.lastUsed).toLocaleString()}
+                      {new Date(stat.lastUsed).toLocaleString('en-US', {
+                        timeZone: 'America/New_York'
+                      })}
                     </td>
                   </tr>
                 ))}
@@ -115,7 +117,9 @@ export default async function AdminDashboard() {
                   <>
                     <tr key={log.id} className="hover:bg-gray-50">
                       <td className="border border-gray-300 px-4 py-2 text-sm">
-                        {new Date(log.timestamp).toLocaleString()}
+                        {new Date(log.timestamp).toLocaleString('en-US', {
+                          timeZone: 'America/New_York'
+                        })}
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
                         {log.user}
