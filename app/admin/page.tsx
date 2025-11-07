@@ -1,4 +1,5 @@
 import { getRecentLogs, getUserStats, getRedisClient, type AnalysisLog, type UserStats } from '@/lib/logging'
+import { LogoutButton } from './LogoutButton'
 
 export const metadata = {
   title: 'Admin Dashboard | AI Skin Analyzer',
@@ -36,7 +37,10 @@ export default async function AdminDashboard() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
-      <h1 className="text-2xl font-bold mb-8">Admin Dashboard</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+        <LogoutButton />
+      </div>
 
       {error && (
         <div className="bg-red-50 border border-red-200 p-4 rounded mb-8">

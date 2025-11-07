@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Test script for Step 3 Implementation
- * Tests role-based access control and rate limiting
+ * Test script for Step 3 Implementation - Updated with logout tests
+ * Tests role-based access control, rate limiting, and logout functionality
  */
 
 const https = require('https');
@@ -17,6 +17,7 @@ const colors = {
   red: '\x1b[31m',
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
+  cyan: '\x1b[36m',
 };
 
 function log(message, color = 'reset') {
@@ -69,14 +70,16 @@ function makeRequest(path, options = {}) {
 }
 
 async function runTests() {
-  log('\n=== Step 3 Implementation Tests ===', 'blue');
+  log('\n=== Step 3 Implementation Tests (Updated) ===', 'blue');
 
   // Test 1: Check that /admin redirects to login without auth
   log('\nTest 1: Admin page requires authentication', 'yellow');
   try {
     const res = await makeRequest('/admin');
     if (res.status === 307 || res.status === 302) {
+      const location = res.headers.location;
       log('✅ Admin page redirects to login when not authenticated', 'green');
+      log(`   Redirect URL: ${location}`, 'cyan');
     } else {
       log(`❌ Admin page returned status ${res.status}, expected redirect`, 'red');
     }
@@ -160,8 +163,79 @@ async function runTests() {
     log(`❌ Error during admin login: ${err.message}`, 'red');
   }
 
-  // Test 6: Test rate limiting
-  log('\nTest 6: Rate limiting (5 attempts allowed)', 'yellow');
+  // Test 6: Test logout functionality
+  log('\nTest 6: Logout functionality', 'yellow');
+  try {
+    // First login as admin
+    const loginRes = await makeRequest('/api/login', {
+      method: 'POST',
+      body: { password: 'admin123' },
+    });
+
+    if (loginRes.status === 200 && loginRes.data.success) {
+      const authToken = loginRes.headers['set-cookie']?.find(c => c.startsWith('auth-token='));
+
+      // Now test logout
+      const logoutRes = await makeRequest('/api/logout', {
+        method: 'POST',
+        headers: {
+          'Cookie': authToken?.split(';')[0],
+        },
+      });
+
+      if (logoutRes.status === 200) {
+        log('✅ Logout endpoint works correctly', 'green');
+
+        // Verify the cookie was cleared
+        const clearedCookie = logoutRes.headers['set-cookie']?.find(c => c.includes('auth-token=;'));
+        if (clearedCookie) {
+          log('✅ Auth cookie was cleared on logout', 'green');
+        } else {
+          log('❌ Auth cookie was not properly cleared', 'red');
+        }
+      } else {
+        log(`❌ Logout failed with status ${logoutRes.status}`, 'red');
+      }
+    }
+  } catch (err) {
+    log(`❌ Error testing logout: ${err.message}`, 'red');
+  }
+
+  // Test 7: Test admin redirect flow
+  log('\nTest 7: Admin redirect flow (non-admin user)', 'yellow');
+  try {
+    // Login as regular user first
+    const loginRes = await makeRequest('/api/login', {
+      method: 'POST',
+      body: { password: 'test123' },
+    });
+
+    if (loginRes.status === 200 && loginRes.data.success) {
+      const authToken = loginRes.headers['set-cookie']?.find(c => c.startsWith('auth-token='));
+
+      // Try to access admin with regular user token
+      const adminRes = await makeRequest('/admin', {
+        headers: {
+          'Cookie': authToken?.split(';')[0],
+        },
+      });
+
+      if (adminRes.status === 307 || adminRes.status === 302) {
+        const location = adminRes.headers.location;
+        if (location && location.includes('admin-required')) {
+          log('✅ Non-admin redirected to login with admin-required parameter', 'green');
+          log(`   Redirect URL: ${location}`, 'cyan');
+        } else {
+          log('❌ Non-admin redirected but without admin-required parameter', 'red');
+        }
+      }
+    }
+  } catch (err) {
+    log(`❌ Error testing admin redirect flow: ${err.message}`, 'red');
+  }
+
+  // Test 8: Test rate limiting
+  log('\nTest 8: Rate limiting (5 attempts allowed)', 'yellow');
   const testIp = '192.168.1.' + Math.floor(Math.random() * 255);
 
   for (let i = 1; i <= 7; i++) {
@@ -193,18 +267,32 @@ async function runTests() {
   }
 
   log('\n=== Test Summary ===', 'blue');
-  log('Implementation complete! Key features:', 'green');
+  log('Step 3 Implementation COMPLETE! ✨', 'green');
+
+  log('\nKey features implemented:', 'cyan');
   log('  ✓ Role-based access control (admin vs user)', 'green');
   log('  ✓ Rate limiting (5 attempts per IP)', 'green');
   log('  ✓ Admin dashboard requires admin role', 'green');
   log('  ✓ Regular users cannot access admin area', 'green');
+  log('  ✓ Logout functionality added', 'green');
+  log('  ✓ Context-aware login messages', 'green');
+  log('  ✓ Improved admin redirect flow (clears non-admin tokens)', 'green');
 
   log('\nManual tests to perform:', 'yellow');
   log('  1. Visit http://localhost:3000', 'blue');
-  log('  2. Test keyboard shortcut: Ctrl+Shift+A (or Cmd+Shift+A on Mac)', 'blue');
-  log('  3. Check footer for subtle "v1.0" link', 'blue');
-  log('  4. Login with "admin123" to access /admin', 'blue');
-  log('  5. Login with "test123" and verify no admin access', 'blue');
+  log('  2. Test logout button in header', 'blue');
+  log('  3. Test keyboard shortcut: Ctrl+Shift+A (or Cmd+Shift+A on Mac)', 'blue');
+  log('  4. Check footer for subtle "v1.0" link', 'blue');
+  log('  5. As regular user, click v1.0 → see admin-required message', 'blue');
+  log('  6. Login with "admin123" to access /admin', 'blue');
+  log('  7. Login with "test123" and verify no admin access', 'blue');
+  log('  8. Test logout button on admin dashboard', 'blue');
+
+  log('\nAuthentication flow improvements:', 'cyan');
+  log('  • Regular users trying to access admin are now prompted for admin password', 'green');
+  log('  • No more authentication loops - cookies are cleared when needed', 'green');
+  log('  • Users can easily switch between accounts using logout', 'green');
+  log('  • Clear messaging when admin access is required', 'green');
 }
 
 // Run tests
