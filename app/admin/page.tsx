@@ -9,6 +9,36 @@ export const metadata = {
 // Force dynamic rendering (don't try to pre-render at build time)
 export const dynamic = 'force-dynamic'
 
+// Stat Card Component
+interface StatCardProps {
+  icon: string
+  title: string
+  value: number | string
+  gradient: string
+  subtitle?: string
+}
+
+function StatCard({ icon, title, value, gradient, subtitle }: StatCardProps) {
+  return (
+    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 p-6 border border-gray-100">
+      <div className="flex items-start justify-between mb-3">
+        <div className={`text-3xl bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}>
+          {icon}
+        </div>
+      </div>
+      <div className="space-y-1">
+        <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">{title}</p>
+        <p className={`text-3xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}>
+          {value}
+        </p>
+        {subtitle && (
+          <p className="text-xs text-gray-500 mt-1">{subtitle}</p>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default async function AdminDashboard() {
   // Fetch all data in parallel
   let logs: AnalysisLog[] = []
@@ -36,11 +66,15 @@ export default async function AdminDashboard() {
   const duplicatePercentage = totalAnalyses > 0 ? Math.round((duplicates / totalAnalyses) * 100) : 0
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-        <LogoutButton />
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="p-8 max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-1">Admin Dashboard</h1>
+            <p className="text-sm text-gray-600">Monitor usage analytics and system health</p>
+          </div>
+          <LogoutButton />
+        </div>
 
       {error && (
         <div className="bg-red-50 border border-red-200 p-4 rounded mb-8">
@@ -48,13 +82,43 @@ export default async function AdminDashboard() {
         </div>
       )}
 
-      {/* Summary Stats */}
-      <div className="mb-8 space-y-2">
-        <p><strong>Total Analyses (All Time):</strong> {totalAnalyses}</p>
-        <p><strong>Recent Logs (Last 50):</strong> {logs.length}</p>
-        <p><strong>Unique Users:</strong> {userStats.length}</p>
-        <p><strong>Unique Images:</strong> {uniqueImages}</p>
-        <p><strong>Duplicates:</strong> {duplicates} ({duplicatePercentage}%)</p>
+      {/* Summary Stats - Modern Card Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+        <StatCard
+          icon="📊"
+          title="Total Analyses"
+          value={totalAnalyses.toLocaleString()}
+          gradient="from-blue-500 to-blue-600"
+          subtitle="All time"
+        />
+        <StatCard
+          icon="👥"
+          title="Unique Users"
+          value={userStats.length.toLocaleString()}
+          gradient="from-purple-500 to-purple-600"
+          subtitle="Registered + Anonymous"
+        />
+        <StatCard
+          icon="🖼️"
+          title="Unique Images"
+          value={uniqueImages.toLocaleString()}
+          gradient="from-green-500 to-green-600"
+          subtitle="Analyzed"
+        />
+        <StatCard
+          icon="📝"
+          title="Recent Logs"
+          value={logs.length}
+          gradient="from-orange-500 to-orange-600"
+          subtitle="Last 50 entries"
+        />
+        <StatCard
+          icon="🔄"
+          title="Duplicates"
+          value={`${duplicatePercentage}%`}
+          gradient="from-pink-500 to-red-500"
+          subtitle={`${duplicates.toLocaleString()} re-analyzed`}
+        />
       </div>
 
       {/* User Stats */}
@@ -163,6 +227,7 @@ export default async function AdminDashboard() {
           </div>
         )}
       </section>
+      </div>
     </div>
   )
 }
