@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import type { SkinAnalysisResult, ApiError } from '@/types/analysis'
 import { FileUpload, DisclaimerCheckbox } from '@/app/components/FileUpload'
 import { AnalysisResults } from '@/app/components/Analysis'
@@ -10,6 +12,8 @@ import { getErrorMessage } from '@/lib/utils'
 import { useLocalStorageBoolean, useLocalStorage } from '@/lib/hooks'
 
 export default function Home() {
+  const router = useRouter()
+
   // State management
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
@@ -50,6 +54,18 @@ export default function Home() {
     setAnonId(newAnonId)
     return newAnonId
   }
+
+  // Keyboard shortcut for admin dashboard
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
+        e.preventDefault()
+        router.push('/admin')
+      }
+    }
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [router])
 
   // Handle file selection and analysis
   const handleFileSelect = async (file: File) => {
@@ -205,11 +221,14 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="mt-auto border-t border-gray-100 bg-white">
-        <div className="max-w-2xl mx-auto px-4 py-6">
-          <p className="text-center text-xs text-gray-500">
+        <div className="max-w-2xl mx-auto px-4 py-6 flex justify-between items-center">
+          <p className="text-center text-xs text-gray-500 flex-1">
             © 2025 AI Skin Analyzer. For informational purposes only.
             Not a substitute for professional medical advice.
           </p>
+          <Link href="/admin" className="text-gray-400 text-xs hover:text-gray-500">
+            v1.0
+          </Link>
         </div>
       </footer>
     </main>

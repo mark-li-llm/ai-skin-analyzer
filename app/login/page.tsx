@@ -24,10 +24,13 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (data.success) {
-        router.push('/');
-        router.refresh();
+        // Redirect based on user role
+        const redirectPath = data.role === 'admin' ? '/admin' : '/';
+        console.log('Login successful, redirecting to:', redirectPath);
+        window.location.href = redirectPath; // Use direct navigation instead of router
       } else {
-        setError('Invalid password');
+        // Show actual error message from API
+        setError(data.error || 'Invalid password');
         setPassword('');
       }
     } catch (err) {
