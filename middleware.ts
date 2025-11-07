@@ -9,7 +9,6 @@ export async function middleware(request: NextRequest) {
   // Public paths that don't require authentication
   if (
     pathname === '/login' ||
-    pathname === '/admin' || // Temporarily public for Step 2 (will add password in Step 3)
     pathname.startsWith('/_next') ||
     pathname === '/favicon.ico' ||
     pathname === '/api/login'
@@ -31,12 +30,23 @@ export async function middleware(request: NextRequest) {
     const { payload } = await jwtVerify(authToken.value, secret);
 
     // Check payload contains expected data
-    if (payload.authenticated === true) {
-      return NextResponse.next();  // ✅ Valid token - allow access
+    if (payload.authenticated !== true) {
+      // Invalid payload - redirect to login
+      return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    // Invalid payload - redirect to login
-    return NextResponse.redirect(new URL('/login', request.url));
+    // Special handling for admin routes
+    if (pathname.startsWith('/admin')) {
+      // Check if user has admin role
+      if (payload.role !== 'admin') {
+        // User doesn't have admin role - redirect to login
+        // This handles both missing role (old tokens) and user role
+        return NextResponse.redirect(new URL('/login', request.url));
+      }
+    }
+
+    // Valid token and authorized for the route
+    return NextResponse.next();
 
   } catch (error) {
     // Token verification failed (invalid signature, expired, malformed)
