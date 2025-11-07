@@ -141,10 +141,25 @@ export async function getUserStats(): Promise<UserStats[]> {
       return [];
     }
 
+    // Build array of promises for parallel execution
+    const promises = keys.map(key => client.hgetall(key as string));
+
+    // Execute all queries in parallel using allSettled for better error handling
+    const results = await Promise.allSettled(promises);
+
+    // Process successful results
     const stats: UserStats[] = [];
 
-    for (const key of keys) {
-      const userStats = await client.hgetall(key as string);
+    for (let i = 0; i < results.length; i++) {
+      const result = results[i];
+
+      // Skip failed queries
+      if (result.status === 'rejected') {
+        console.warn(`Failed to fetch stats for ${keys[i]}:`, result.reason);
+        continue;
+      }
+
+      const userStats = result.value;
       if (userStats) {
         stats.push({
           user: userStats.user as string || 'unknown',
@@ -178,25 +193,50 @@ export async function hasImageBeenAnalyzed(imageHash: string): Promise<boolean> 
 export async function getRecentLogs(limit: number = 50): Promise<AnalysisLog[]> {
   try {
     const client = getRedisClient();
-    const logs: AnalysisLog[] = [];
     const today = new Date();
 
-    // Check last 90 days
-    for (let i = 0; i < 90; i++) {
+    // Build array of date keys for parallel queries
+    // Reduced from 90 to 14 days for better performance
+    const promises: Promise<any[]>[] = [];
+    const dateKeys: string[] = [];
+
+    for (let i = 0; i < 14; i++) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
       const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      dateKeys.push(dateKey);
 
-      const dayLogs = await client.lrange(`logs:${dateKey}`, 0, limit - logs.length - 1);
+      // Get all logs for each day (we'll limit the total later)
+      promises.push(client.lrange(`logs:${dateKey}`, 0, -1));
+    }
+
+    // Execute all queries in parallel using allSettled for better error handling
+    const results = await Promise.allSettled(promises);
+
+    // Process results and flatten into single array
+    const logs: AnalysisLog[] = [];
+
+    for (let i = 0; i < results.length; i++) {
+      const result = results[i];
+
+      // Skip failed queries
+      if (result.status === 'rejected') {
+        console.warn(`Failed to fetch logs for ${dateKeys[i]}:`, result.reason);
+        continue;
+      }
+
+      const dayLogs = result.value;
 
       for (const log of dayLogs) {
         // Upstash REST API auto-deserializes JSON, check if already parsed
         const parsedLog = typeof log === 'string' ? JSON.parse(log) : log;
         logs.push(parsedLog as AnalysisLog);
-        if (logs.length >= limit) break;
-      }
 
-      if (logs.length >= limit) break;
+        // Stop processing once we have enough logs
+        if (logs.length >= limit) {
+          return logs.slice(0, limit);
+        }
+      }
     }
 
     return logs;
