@@ -1,13 +1,19 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, FormEvent, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function LoginPage() {
+function LoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Check if admin access is required
+  const redirectPath = searchParams.get('redirect');
+  const reason = searchParams.get('reason');
+  const needsAdmin = reason === 'admin-required';
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -24,10 +30,13 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (data.success) {
-        // Redirect based on user role
-        const redirectPath = data.role === 'admin' ? '/admin' : '/';
-        console.log('Login successful, redirecting to:', redirectPath);
-        window.location.href = redirectPath; // Use direct navigation instead of router
+        // Use redirect path from query if available, otherwise redirect based on role
+        let targetPath = redirectPath || (data.role === 'admin' ? '/admin' : '/');
+        console.log('Login successful, redirecting to:', targetPath);
+        // Use router.push with a small delay to ensure cookie is set
+        setTimeout(() => {
+          window.location.href = targetPath;
+        }, 100);
       } else {
         // Show actual error message from API
         setError(data.error || 'Invalid password');
@@ -45,8 +54,17 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8 p-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900">🔒</h1>
-          <h2 className="mt-4 text-2xl font-bold text-gray-900">AI Skin Analyzer</h2>
-          <p className="mt-2 text-sm text-gray-600">Access Required</p>
+          <h2 className="mt-4 text-2xl font-bold text-gray-900">
+            {needsAdmin ? 'Admin Dashboard' : 'AI Skin Analyzer'}
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            {needsAdmin ? 'Admin Access Required' : 'Access Required'}
+          </p>
+          {needsAdmin && (
+            <p className="mt-2 text-xs text-amber-600">
+              Please enter the admin password to continue
+            </p>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -80,5 +98,13 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-gray-50">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

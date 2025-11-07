@@ -39,9 +39,23 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith('/admin')) {
       // Check if user has admin role
       if (payload.role !== 'admin') {
-        // User doesn't have admin role - redirect to login
+        // User doesn't have admin role - clear their cookie and redirect to login
         // This handles both missing role (old tokens) and user role
-        return NextResponse.redirect(new URL('/login', request.url));
+        const loginUrl = new URL('/login', request.url);
+        loginUrl.searchParams.set('redirect', '/admin');
+        loginUrl.searchParams.set('reason', 'admin-required');
+
+        const response = NextResponse.redirect(loginUrl);
+        // Clear the existing non-admin token
+        response.cookies.set('auth-token', '', {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 0, // Immediate expiry
+          path: '/',
+        });
+
+        return response;
       }
     }
 

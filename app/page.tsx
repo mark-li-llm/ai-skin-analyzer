@@ -19,6 +19,7 @@ export default function Home() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [results, setResults] = useState<SkinAnalysisResult | null>(null)
   const [error, setError] = useState<ApiError | null>(null)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   // SSR-safe localStorage for disclaimer
   const [disclaimerAccepted, setDisclaimerAccepted, isLoaded] = useLocalStorageBoolean(
@@ -98,24 +99,54 @@ export default function Home() {
     setError(null)
   }
 
+  // Handle logout
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+    try {
+      const response = await fetch('/api/logout', {
+        method: 'POST',
+      })
+
+      if (response.ok) {
+        // Redirect to login page after logout
+        router.push('/login')
+      }
+    } catch (error) {
+      console.error('Logout failed:', error)
+    } finally {
+      setIsLoggingOut(false)
+    }
+  }
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-100">
         <div className="max-w-2xl mx-auto px-4 py-6">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900">
-              AI Skin Analyzer
-            </h1>
-            <p className="mt-2 text-gray-600">
-              Discover your skin type and get personalized sunscreen recommendations
-            </p>
-            {isMockMode() && (
-              <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-medium">
-                <span className="mr-1">🧪</span>
-                Development Mode (Using Mock Data)
-              </div>
-            )}
+          <div className="relative">
+            {/* Logout button in top right */}
+            <button
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="absolute right-0 top-0 text-sm text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoggingOut ? 'Logging out...' : 'Logout'}
+            </button>
+
+            <div className="text-center">
+              <h1 className="text-3xl font-bold text-gray-900">
+                AI Skin Analyzer
+              </h1>
+              <p className="mt-2 text-gray-600">
+                Discover your skin type and get personalized sunscreen recommendations
+              </p>
+              {isMockMode() && (
+                <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 text-xs font-medium">
+                  <span className="mr-1">🧪</span>
+                  Development Mode (Using Mock Data)
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
